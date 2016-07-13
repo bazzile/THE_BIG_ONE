@@ -39,6 +39,7 @@ sleep(3)
 # TODO разобраться, как получить общее число тендеров в списке
 # TODO собрать всех участников в сет и устранить дубликаты
 # TODO выявить победителя
+# TODO добавить ссылку на тендер (берётся из адресной строки)
 # TODO экспорт в Excel
 for i in range(9, 21):
     waiter("//*[@id='slidepanel-left-wrapper']/div/div/div/div[2]/div[" + str(i) + "]/div/div[2]/div[1]", click=1)
