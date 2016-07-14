@@ -2,24 +2,32 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import StaleElementReferenceException
 from time import sleep
 from selenium import webdriver
 from Misc.Tenderplan.password import get_passwd
 
 
-def waiter(expression, method='xpath', delay=10, click=0):
+def waiter(expression, method='xpath', delay=10, click=0, event='presence'):
     try:
         if method == 'xpath':
-            WebDriverWait(driver, delay).until(EC.presence_of_element_located((By.XPATH, expression)))
+            if event == 'presence':
+                WebDriverWait(driver, delay).until(EC.presence_of_element_located((By.XPATH, expression)))
+            elif event == 'visibility':
+                WebDriverWait(driver, delay).until(EC.visibility_of_element_located((By.XPATH, expression)))
         elif method == 'css':
-            WebDriverWait(driver, delay).until(EC.presence_of_element_located((By.CSS_SELECTOR, expression)))
-        # print("Page is ready!")
+            if event == 'presence':
+                WebDriverWait(driver, delay).until(EC.presence_of_element_located((By.CSS_SELECTOR, expression)))
+            if event == 'visibility':
+                WebDriverWait(driver, delay).until(EC.visibility_of_element_located((By.CSS_SELECTOR, expression)))
         if click == 1:
             driver.find_element_by_xpath(expression).click()
         return True
     except TimeoutException:
         # print("Loading took too much time!")
         return False
+
 # запрашиваем пароль к tenderplan.ru
 pwd = get_passwd().strip()
 driver = webdriver.Firefox()
@@ -35,26 +43,66 @@ waiter("//*[contains(text(), 'Лиды отработать')]", click=1)
 # ждём, пока лиды прогрузятся
 sleep(3)
 
-# Перебираем список лидов
-# TODO разобраться, как получить общее число тендеров в списке
 # TODO собрать всех участников в сет и устранить дубликаты
 # TODO выявить победителя
 # TODO добавить ссылку на тендер (берётся из адресной строки)
 # TODO экспорт в Excel
-for i in range(9, 21):
-    waiter("//*[@id='slidepanel-left-wrapper']/div/div/div/div[2]/div[" + str(i) + "]/div/div[2]/div[1]", click=1)
-    # Название тендера
-    tender_name = driver.find_element_by_xpath("//*[@id='slidepanel-left-wrapper']/div/div/div/div[2]/div[" + str(i) + "]/div/div[2]/div[1]").text
-    print('\nЛид {}: {}'.format(i, tender_name))
 
-    if waiter('.col-sm-12.notification-title.notification-header-mark', 'css') is True:
-        # Страница с тендером полностью прогрузилась, можно искать таблицу участников
-        table_presence_tag = waiter('table.participants-table', method='css', delay=0)
-        if table_presence_tag is True:
-            # таблица участников присутствует, обрабатываем
-            # waiter('table.participants-table', method='css')
-            table = driver.find_element_by_css_selector('.table.table-striped.table-condensed.participants-table>tbody')
-            for row in table.find_elements_by_css_selector('.deflink-button>span'):
-                print(row.text)
-        else:
-            print('Таблицы участников нету, переходим к следующему тендеру...')
+counter = 0
+
+seen_companies = set()
+participants_list = []
+
+while True:
+    counter += 1
+    try:
+        participant_dict = {}
+        # Перебираем список лидов, ожидая (visibility), пока прогрузятся новые
+        waiter(
+            "//*[@id='slidepanel-left-wrapper']/div/div/div/div[2]/div[" + str(counter) + "]",
+            click=1, event='visibility')
+        # Название тендера
+        tender_name = driver.find_element_by_xpath(
+            "//*[@id='slidepanel-left-wrapper']/div/div/div/div[2]/div[" + str(counter) + "]/div/div[2]/div[1]").text
+        participant_dict['tender_name'] = [tender_name]
+        print('\nЛид {}: {}'.format(counter, tender_name))
+    except NoSuchElementException:
+        print('Конец списка лидов')
+        break
+
+    try:
+        if waiter('.col-sm-12.notification-title.notification-header-mark', 'css', event='visibility') is True:
+            # Страница с тендером полностью прогрузилась, можно искать таблицу участников
+            table_presence_tag = waiter('table.participants-table', method='css', delay=0)
+            if table_presence_tag is True:
+                # таблица участников присутствует, обрабатываем
+                # waiter('table.participants-table', method='css')
+                table = driver.find_element_by_css_selector(
+                    '.table.table-striped.table-condensed.participants-table>tbody')
+                print('\n')
+                for row in table.find_elements_by_css_selector('.deflink-button>span'):
+                    if len(row.text) > 0:
+                        company = row.text.strip()
+                        print(company)
+                        if company not in seen_companies:
+                            seen_companies.add(company)
+                            participant_dict['company'] = company
+                            participants_list.append(participant_dict)
+                        else:
+                            for item in participants_list:
+                                if item['company'] == company:
+                                    item['tender_name'].append(tender_name)
+
+            else:
+                print('Таблицы участников нету, переходим к следующему тендеру...')
+
+    except (NoSuchElementException, StaleElementReferenceException):
+        print('{}\nОшибка приполучении списка, пробуем заново...'.format(80 * '='))
+        del participant_dict
+        counter -= 1
+        # sleep(1)
+        continue
+
+for item in participants_list:
+    print(item)
+
