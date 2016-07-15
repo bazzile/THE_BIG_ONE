@@ -85,14 +85,17 @@ def get_participants():
                     print('\n')
 
                     partictpats = table.find_elements_by_css_selector('.deflink-button>span')
+                    winner_flag = 0
                     for x in range(len(partictpats)):
                         if len(partictpats[x].text) > 0:
                                 # print('=' * 2000)
                             company = partictpats[x].text.strip()
-                            participant_dict = {'tender_name': [tender_name]}
                             print(company)
                             if x + 1 != len(partictpats) and partictpats[x + 1].size == {'height': 16, 'width': 16}:
+                                winner_flag = True
                                 print('Winner!')
+                            else:
+                                winner_flag = False
                             # if x < len(partictpats):
                             #     print('Curr x: {}, length: {}, x+1: {}'.format(x, len(partictpats), x + 1))
                             #     # размер значка-кубка (всегда идёт элементом списка после названия компании)
@@ -100,15 +103,20 @@ def get_participants():
                             #         print('Winner!')
                             if company not in seen_companies:
                                 seen_companies.add(company)
-                                participant_dict['company'] = company
+                                if winner_flag is True:
+                                    participant_dict = {'company': company, 'tender_name': [{tender_name: 'win'}]}
+                                elif winner_flag is False:
+                                    participant_dict = {'company': company, 'tender_name': [{tender_name: 'par'}]}
                                 participants_list.append(participant_dict)
+                                del participant_dict
                             else:
                                 for item in participants_list:
                                     if item['company'] == company:
-                                        item['tender_name'].append(tender_name)
+                                        if winner_flag is True:
+                                            item['tender_name'].append({tender_name: 'win'})
+                                        elif winner_flag is False:
+                                            item['tender_name'].append({tender_name: 'par'})
                                         break
-                            del participant_dict
-
                 else:
                     print('Таблицы участников нету, переходим к следующему тендеру...')
 
