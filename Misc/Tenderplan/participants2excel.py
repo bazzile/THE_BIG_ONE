@@ -83,15 +83,21 @@ def get_participants():
                     table = driver.find_element_by_css_selector(
                         '.table.table-striped.table-condensed.participants-table>tbody')
                     print('\n')
-                    for row in table.find_elements_by_css_selector('.deflink-button>span'):
-                        # размер значка-кубка
-                        if row.size == {'height': 16, 'width': 16}:
-                            print('Winner!')
-                        if len(row.text) > 0:
+
+                    partictpats = table.find_elements_by_css_selector('.deflink-button>span')
+                    for x in range(len(partictpats)):
+                        if len(partictpats[x].text) > 0:
                                 # print('=' * 2000)
-                            company = row.text.strip()
+                            company = partictpats[x].text.strip()
                             participant_dict = {'tender_name': [tender_name]}
                             print(company)
+                            if x + 1 != len(partictpats) and partictpats[x + 1].size == {'height': 16, 'width': 16}:
+                                print('Winner!')
+                            # if x < len(partictpats):
+                            #     print('Curr x: {}, length: {}, x+1: {}'.format(x, len(partictpats), x + 1))
+                            #     # размер значка-кубка (всегда идёт элементом списка после названия компании)
+                            #     if partictpats[x + 1].size == {'height': 16, 'width': 16}:
+                            #         print('Winner!')
                             if company not in seen_companies:
                                 seen_companies.add(company)
                                 participant_dict['company'] = company
