@@ -37,7 +37,7 @@ def get_participants():
     driver.get("http://tenderplan.ru/account/logon")
     username = driver.find_element_by_name("EmailAddress")
     password = driver.find_element_by_name("Password")
-    username.send_keys("lobanov@innoter.com")
+    username.send_keys("zheleznov@innoter.com")
     password.send_keys(pwd)
     driver.find_element_by_xpath("/html/body/div[1]/div/div[1]/section/div/div/form/div[3]/button").click()
     # Жмём "Лиды отработать"
