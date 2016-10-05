@@ -21,6 +21,6 @@ print(q[0].find(".//coordinates").text)
 
 with open(os.path.join(dst_dir, filename.split('.')[0] + '.tab'), 'w') as f:
     # TODO достать пример таблицы для растрового файла
-    # TODO запросить у Димы пример названия выходного файла (306361-306371.Jpeg / 306361_306370quicklook_306361_306370_1.Jpeg)
+    # TODO запросить у Димы пример (единый для всех?) названия выходного файла (306361-306371.Jpeg / 306361_306370quicklook_306361_306370_1.Jpeg)
     lines = ['!table', '!version 300', '!charset WindowsLatin1', '', 'Definition Table']
     f.writelines("\n".join(lines))
