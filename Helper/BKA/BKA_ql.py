@@ -11,6 +11,7 @@ src_file = r"C:\Users\lobanov\PycharmProjects\THE_BIG_ONE\Helper\BKA\QL\13_BKA15
 # TODO далее-временный блок, удалить, как только разберёшься выгрузке из сырого kmz
 temp_extracted_dir = os.path.dirname(src_file)
 
+# TODO название директории dst_dir_name/path должно выбираться из Helper
 dst_dir_name = 'QuickLooks'
 dst_dir_path = os.path.join(os.path.dirname(src_file), dst_dir_name)
 
@@ -21,18 +22,20 @@ if not os.path.exists(dst_dir_path):
 tree = ET.parse(src_file)
 root = tree.getroot()
 
-q = root.findall(".//GroundOverlay")
+# ищем в kml все записи, описывающие квиклук
+ql_kml_list = root.findall(".//GroundOverlay")
 
 # print(len(q))
 
-for ql_entry in range(len(q)):
-    ql_filename = q[ql_entry].find(".//href").text
+for q in range(len(ql_kml_list)):
+    ql_filename = ql_kml_list[q].find(".//href").text
     standard_ql_name = ql_filename[:13]
-    ql_path = os.path.join(dst_dir_path, standard_ql_name + '.jpg')
-    shutil.copy(os.path.join(temp_extracted_dir, ql_filename), ql_path)
-    ql_image_obj = Image.open(ql_path)
+    # стандартизируем имя и копируем квиклук в целевую директорию, где измеряем его пикс. ширину и высоту
+    ql_dst_path = os.path.join(dst_dir_path, standard_ql_name + '.jpg')
+    shutil.copy(os.path.join(temp_extracted_dir, ql_filename), ql_dst_path)
+    ql_image_obj = Image.open(ql_dst_path)
     ql_width, ql_height = ql_image_obj.size[0], ql_image_obj.size[1]
-    coords_str = q[ql_entry].find(".//coordinates").text
+    coords_str = ql_kml_list[q].find(".//coordinates").text
     # преобразуем строку с координатами углов в список и разбиваем по 4 точкам
     coords_lst = coords_str.split('\n')
     c1, c2, c3, c4 = coords_lst[3], coords_lst[0], coords_lst[1], coords_lst[2]
