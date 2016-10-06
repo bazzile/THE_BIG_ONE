@@ -26,7 +26,6 @@ root = tree.getroot()
 ql_kml_list = root.findall(".//GroundOverlay")
 
 # print(len(q))
-
 for q in range(len(ql_kml_list)):
     ql_filename = ql_kml_list[q].find(".//href").text
     standard_ql_name = ql_filename[:13]
