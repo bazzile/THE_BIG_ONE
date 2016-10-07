@@ -6,7 +6,8 @@ import xml.etree.ElementTree as ET
 from string import Template
 from PIL import Image
 
-src_file = r"C:\Users\lobanov\PycharmProjects\THE_BIG_ONE\Helper\BKA\QL\13_BKA15\Previews - from 20.05.2016\Previews - from 20.05.2016.kml"
+# src_file = r"C:\Users\lobanov\PycharmProjects\THE_BIG_ONE\Helper\BKA\QL\13_BKA15\Previews - from 20.05.2016\Previews - from 20.05.2016.kml"
+src_file = r"E:\GitHub\the_big_one\Helper\BKA\QL\13_BKA15\Previews - from 20.05.2016\Previews - from 20.05.2016.kml"
 
 # TODO далее-временный блок, удалить, как только разберёшься выгрузке из сырого kmz
 temp_extracted_dir = os.path.dirname(src_file)
