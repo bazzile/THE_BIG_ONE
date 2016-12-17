@@ -35,4 +35,4 @@ for root, dirnames, filenames in os.walk(root_dir):
             with open(os.path.join(dirpath, "ФОРМУЛЯР_НОСИТЕЛЯ.txt"), 'a') as log_f:
                 log_f.write('{}={};\n'.format(f, get_checksum(os.path.join(dirpath, f))))
             file_counter -= 1
-            print("Готово. Осталось файлов: {}".format(file_counter))
+            print("Готово. Осталось файлов: {}\n".format(file_counter))
