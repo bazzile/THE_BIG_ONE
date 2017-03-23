@@ -29,11 +29,12 @@ def create_xml(model_list, dst_dir):
     coord_sys_node = add_node(root_node, "coordSys")
     add_node(coord_sys_node, "sceneCoordSys", {'Datum': 'WGS84'})
     add_node(coord_sys_node, "sceneCoordSys", {'Zone': '37N'})
-    cs_dict = model_list[0]['cs']
-    add_node(coord_sys_node, "sceneCenter", cs_dict)
+    # cs_dict = model_list[0]['cs']
+    # add_node(coord_sys_node, "sceneCenter", cs_dict)
     for model in model_list:
-        in_file_name, pos_dict, rot_dict = model['file'], model['pos'], model['rot']
+        in_file_name, cs_dict, pos_dict, rot_dict = model['file'], model['cs'], model['pos'], model['rot']
         model_node = add_node(root_node, "model")
+        add_node(model_node, "sceneCenter", cs_dict)
         add_node(model_node, "path", 'Data/Object')
         add_node(model_node, "file", in_file_name)
         add_node(model_node, "position", pos_dict)
