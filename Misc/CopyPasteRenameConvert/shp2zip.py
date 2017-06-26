@@ -65,7 +65,7 @@ def ZipShp(inShp, Delete=True):
     # Return zipfile full path
     return zipfl
 
-target_dir = r"U:\PRJ\2017\NGC17\NOR17\1_WorkLayers\Nor17_50000"
+target_dir = r"U:\ОТА\ЯНАО17\Data\Vector\AOI\Районы от Анны\zip\simplified\Anna_AOIs_simplified\SPLIT"
 shp_file_list = []
 for dirpath, dirnames, filenames in os.walk(target_dir):
     for filename in filenames:

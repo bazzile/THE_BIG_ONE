@@ -56,7 +56,6 @@ def create_xml(model_list, dst_dir):
 
         for model_entry in model_info_list:
             if model_entry.get('ID') == model.split('.')[0]:
-                print(model, model_entry.get('Comments'))
                 add_node(model_node, "class", model_entry.get('Class'))
                 add_node(model_node, "type", model_entry.get('Type').zfill(2))
                 add_node(model_node, "origin", model_entry.get('Origin'))
