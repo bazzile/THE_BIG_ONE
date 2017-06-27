@@ -3,8 +3,8 @@ import shutil
 import datetime
 import calendar
 
-in_dir = r"U:\ОТА\ЯНАО17\Data\Imagery\MODIS\NDVI\14562"
-out_dir = r"U:\ОТА\ЯНАО17\Data\Imagery\MODIS\NDVI\MODIS_sorted"
+in_dir = r'/Users/vasily/!MyFiles/WORK/YANAO17/MODIS/2015'
+out_dir = r"/Users/vasily/!MyFiles/WORK/YANAO17/MODIS/sorted"
 
 if not os.path.exists(out_dir):
     os.mkdir(out_dir)
@@ -24,9 +24,9 @@ def JulianDate_to_datetime(y, jd):
 product_levels = []
 for path, dirnames, filenames in os.walk(in_dir):
     for filename in filenames:
-        product_level = filename.split('_')[0]
-        product_year = int(filename.split('_')[1][1:5])
-        product_julian_date = int(filename.split('_')[1][5:8])
+        product_level = filename.split('.')[0]
+        product_year = int(filename.split('.')[1][1:5])
+        product_julian_date = int(filename.split('.')[1][5:8])
         product_start_datetime = JulianDate_to_datetime(product_year, product_julian_date)
         product_end_datetime = product_start_datetime + datetime.timedelta(days=15)
         # print(product_year, product_julian_date, product_start_datetime, product_start_datetime.strftime('%d%b%Y'),
