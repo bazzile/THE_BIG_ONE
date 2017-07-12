@@ -37,3 +37,4 @@ for i, d_link in enumerate(d_link_list):
         full_link = base_part + tile_num + item
         print('Downloading...   ' + item)
         urllib.request.urlretrieve(full_link, os.path.join(dst_subdir, item))
+print('\nГотово!')
