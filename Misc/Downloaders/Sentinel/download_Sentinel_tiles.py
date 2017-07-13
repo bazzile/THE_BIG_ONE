@@ -13,8 +13,8 @@ import json
 #         fname = item_http_link.split('/')[-1].replace('_aid0001', '').rstrip()
 #         print(count + 1, '/', n_items, fname)
 #         urllib.request.urlretrieve(item_http_link.rstrip(), os.path.join(out_folder, fname))
-links_file = r"U:\ОТА\ЯНАО17\Data\Imagery\Sentinel\подбор для мозаики\Ямальский\Спсиок сцен Ямальский 2.txt"
-out_folder = r"U:\ОТА\ЯНАО17\Data\Imagery\Sentinel\подбор для мозаики\Ямальский\p2"
+links_file = r"U:\ОТА\ЯНАО17\Data\Imagery\Sentinel\подбор для мозаики\Тазовский\Список сцен Тазовский5.txt"
+out_folder = r"U:\ОТА\ЯНАО17\Data\Imagery\Sentinel\подбор для мозаики\Тазовский\p5"
 
 with open(links_file) as f:
     d_link_list = f.read().splitlines()

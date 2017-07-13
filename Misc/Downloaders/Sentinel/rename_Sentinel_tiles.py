@@ -4,7 +4,7 @@ import shutil
 # def s2_tile_rename(in_file):
 
 
-in_dir = r"U:\ОТА\ЯНАО17\Data\Imagery\Sentinel\подбор для мозаики\Тазовский"
+in_dir = r"U:\ОТА\ЯНАО17\Data\Imagery\Sentinel\подбор для мозаики\Тазовский\p5"
 for dirpath, dirnames, filenames in os.walk(in_dir):
     for filename in filenames:
         if filename == 'tileInfo.json':
@@ -16,4 +16,12 @@ for dirpath, dirnames, filenames in os.walk(in_dir):
             id_1 = os.path.basename(os.path.dirname(os.path.dirname(filepath)))
             id = id_1.split('_')[-1] + '_' + id_0
             shutil.copyfile(filepath, os.path.join(os.path.dirname(filepath), id + '_tileInfo.json'))
+
+        if filename == 'preview.jp2':
+            filepath = os.path.join(dirpath, filename)
+            print('Processing ' + filepath)
+            id_0 = os.path.basename(os.path.dirname(filepath))
+            id_1 = os.path.basename(os.path.dirname(os.path.dirname(filepath)))
+            id = id_1.split('_')[-1] + '_' + id_0
+            shutil.copyfile(filepath, os.path.join(os.path.dirname(filepath), id + '_preview.jp2'))
 
