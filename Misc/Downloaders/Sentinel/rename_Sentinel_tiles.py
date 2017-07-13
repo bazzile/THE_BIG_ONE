@@ -4,7 +4,7 @@ import shutil
 # def s2_tile_rename(in_file):
 
 
-in_dir = r'/Users/vasily/!MyFiles/WORK/YANAO17/Sentinel2'
+in_dir = r"U:\ОТА\ЯНАО17\Data\Imagery\Sentinel\подбор для мозаики\Тазовский"
 for dirpath, dirnames, filenames in os.walk(in_dir):
     for filename in filenames:
         if filename == 'tileInfo.json':
