@@ -4,12 +4,16 @@
 import sys
 sys.path.append('path to this module')
 import bands_merge"""
+import locale
 import os
 import re
+import sys
+
 import gdal_merge
 
 print('Model imported successfully!')
-user_input = raw_input("Enter the path to Sentinel-2 files root folder: ")
+user_input = raw_input("Enter the path to Sentinel-2 files root folder: ")\
+    .decode(sys.stdin.encoding or locale.getpreferredencoding(True))
 
 assert os.path.exists(user_input), "I did not find the file at, "+str(user_input)
 root_folder = user_input
