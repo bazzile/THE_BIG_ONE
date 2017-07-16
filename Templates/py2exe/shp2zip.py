@@ -1,8 +1,9 @@
+# coding=utf-8
 import os
 import zipfile
 
 
-def ZipShp(inShp, Delete=True):
+def ZipShp(inShp, dst_dir=None, Delete=True):
     """
     Creates a zip file containing the input shapefile
     inputs -
@@ -30,10 +31,15 @@ def ZipShp(inShp, Delete=True):
 
     # Directory of shapefile
     inLocation = os.path.dirname(inShp)
+    # Output directory
+    if dst_dir is None:
+        outLocation = inLocation
+    else:
+        outLocation = dst_dir
     # Base name of shapefile
     inName = os.path.basename(os.path.splitext(inShp)[0])
     # Create zipfile name
-    zipfl = os.path.join(inLocation, inName + ".zip")
+    zipfl = os.path.join(dst_dir, inName + ".zip")
     # Create zipfile object
     ZIP = zipfile.ZipFile(zipfl, "w")
 
@@ -65,12 +71,15 @@ def ZipShp(inShp, Delete=True):
     # Return zipfile full path
     return zipfl
 
-# abspath = os.path.abspath(__file__)
-# dname = os.path.dirname(abspath)
-# os.chdir(dname)
+# target_dir = r"U:\ОТА\ЯНАО17\Data\Vector\AOI\Районы от Анны\zip\simplified\Anna_AOIs_simplified\SPLIT"
+abspath = os.path.abspath(__file__)
+dname = os.path.dirname(abspath)
+os.chdir(dname)
+target_dir = dname
 
-target_dir = r"U:\ОТА\ЯНАО17\Data\Vector\AOI\Районы от Анны\zip\simplified\Anna_AOIs_simplified\SPLIT"
-# target_dir = dname
+out_dir = os.path.join(target_dir, '!shp2zip')
+if not os.path.exists(out_dir):
+    os.mkdir(out_dir)
 
 shp_file_list = []
 for dirpath, dirnames, filenames in os.walk(target_dir):
@@ -80,6 +89,6 @@ for dirpath, dirnames, filenames in os.walk(target_dir):
             shp_file_list.append(shp_filepath)
 shp_list_length = len(shp_file_list)
 for i, shp_file in enumerate(shp_file_list):
-    print('{}/{}. Архивируем {}'.format(i + 1, shp_list_length, os.path.basename(shp_file)))
-    ZipShp(shp_file, Delete=False)
+    print(u'{}/{}. Архивируем {}'.format(i + 1, shp_list_length, os.path.basename(shp_file)))
+    ZipShp(shp_file, dst_dir=out_dir, Delete=False)
 print('\nГотово!')
