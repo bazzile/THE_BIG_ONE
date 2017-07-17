@@ -2,7 +2,7 @@ import openpyxl
 from openpyxl.cell import get_column_letter
 from openpyxl.styles import Font
 
-from SCANEX.zip_meta2exel.shp import scanex_archives_export
+from Misc.SCANEX.zip_meta2exel.shp import scanex_archives_export
 
 
 def metadata2exel(zip_dir, out_filename):

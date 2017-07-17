@@ -1,5 +1,5 @@
 from Templates.make_excel import make2exel
-import Misc.Tenderplan.participants2excel as p2ex
+import Main.Tenderplan.participants2excel as p2ex
 
 import openpyxl
 

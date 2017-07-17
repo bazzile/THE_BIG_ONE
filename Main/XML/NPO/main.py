@@ -1,6 +1,6 @@
 import os
-from Misc.XML.NPO.NPO_scene_xml import create_xml
-from Misc.XML.NPO.tx3_parser import get_values
+from Main.XML.NPO.NPO_scene_xml import create_xml
+from Main.XML.NPO.tx3_parser import get_values
 
 src_dir = r'C:\Users\lobanov\PycharmProjects\THE_BIG_ONE\Misc\XML\NPO\тестовый участок'
 

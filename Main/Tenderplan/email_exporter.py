@@ -6,7 +6,7 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import StaleElementReferenceException
 from time import sleep
 from selenium import webdriver
-from Misc.Tenderplan.password import get_passwd
+from Main.Tenderplan.password import get_passwd
 
 
 def waiter(expression, method='xpath', delay=7, click=0, event='presence'):
