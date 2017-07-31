@@ -69,7 +69,7 @@ def ZipShp(inShp, Delete=True):
 # dname = os.path.dirname(abspath)
 # os.chdir(dname)
 
-target_dir = r"U:\ОТА\ЯНАО17\Data\Vector\AOI\Районы от Анны\zip\simplified\Anna_AOIs_simplified\SPLIT"
+target_dir = r"U:\ОТА\Проработка\Мониторинг_берегов\Части берега\!shp2zip"
 # target_dir = dname
 
 shp_file_list = []
