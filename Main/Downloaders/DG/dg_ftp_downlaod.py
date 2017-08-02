@@ -49,28 +49,30 @@ for dirpath, dirnames, filenames in os.walk(out_dir):
 
 refined_download_list = [item for item in download_list_full if item.rstrip('_EOT.TXT') not in ready_list]
 items_to_download_counter = len(refined_download_list)
-
-for item in refined_download_list:
-    down_filepath = os.path.join(out_dir, item.rstrip('_EOT.TXT') + downloading_flag)
-    down_file = open(down_filepath, 'w').close()
-    print('\n{} / {} продуктов уже загружено, продолжаем загрузку...'
-          .format(total_items - items_to_download_counter, total_items))
-    r = BytesIO()
-    # item.replace("_EOT.TXT", ".MAN") is used beacuse EOT is just a flag-file, and MAN contains contents
-    ftp.retrbinary('RETR %s' % item.replace("_EOT.TXT", ".MAN"), r.write)
-    manifest_list = r.getvalue().decode("utf-8")
-    # skipping MAN file and foldername
-    for line in manifest_list.splitlines():
-        if '.' in line.split(r'/')[-1]:
-            assert line[:2] == './'
-            relfile_path = line[2:]
-            dst_filepath = os.path.join(out_dir, relfile_path)
-            if not os.path.exists(os.path.dirname(dst_filepath)):
-                os.makedirs(os.path.dirname(dst_filepath))
-            print('Скачиваем {}...'.format(relfile_path))
-            ftp.retrbinary("RETR %s" % line, open(dst_filepath, 'wb').write)
-    r.close()
-    os.remove(down_filepath)
-    items_to_download_counter -= 1
+if items_to_download_counter == 0:
+    print('Все данные уже загружены!')
+else:
+    for item in refined_download_list:
+        down_filepath = os.path.join(out_dir, item.rstrip('_EOT.TXT') + downloading_flag)
+        down_file = open(down_filepath, 'w').close()
+        print('\n{} / {} продуктов уже загружено, продолжаем загрузку...'
+              .format(total_items - items_to_download_counter, total_items))
+        r = BytesIO()
+        # item.replace("_EOT.TXT", ".MAN") is used beacuse EOT is just a flag-file, and MAN contains contents
+        ftp.retrbinary('RETR %s' % item.replace("_EOT.TXT", ".MAN"), r.write)
+        manifest_list = r.getvalue().decode("utf-8")
+        # skipping MAN file and foldername
+        for line in manifest_list.splitlines():
+            if '.' in line.split(r'/')[-1]:
+                assert line[:2] == './'
+                relfile_path = line[2:]
+                dst_filepath = os.path.join(out_dir, relfile_path)
+                if not os.path.exists(os.path.dirname(dst_filepath)):
+                    os.makedirs(os.path.dirname(dst_filepath))
+                print('Скачиваем {}...'.format(relfile_path))
+                ftp.retrbinary("RETR %s" % line, open(dst_filepath, 'wb').write)
+        r.close()
+        os.remove(down_filepath)
+        items_to_download_counter -= 1
 ftp.quit()
 print("\nГотово! Все данные ({}) успешно загружены в {}".format(len(refined_download_list), out_dir))
