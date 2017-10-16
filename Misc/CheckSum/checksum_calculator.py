@@ -5,8 +5,9 @@ import hashlib
 import time
 import zlib
 
-root_dir = r"U:\PRJ\2017\BANS17\1_QuickWork\4_DEM\HD"
-checksum = 'crc32'  # 'md5' 'sha1'
+root_dir = r"U:\PRJ\2017\RUSMAPS17_3\9_FOR_DISK"
+checksum = 'sha1'  # 'crc32' 'md5'
+filetype = ''  # .tif
 
 
 def crc(fileName):
@@ -47,17 +48,19 @@ def get_checksum(target_file, sum_type):
             return sha1.hexdigest()
 
 
-def worker(dir_path, counter):
+def worker(dir_path, counter, file_type):
     print('{}\nРаботаем с {}'.format(80 * '=', dir_path))
     if not os.path.isfile(os.path.join(dir_path, "ФОРМУЛЯР_НОСИТЕЛЯ.txt")):
         t = time.time()
+
         for f in os.listdir(dir_path):
-            print('Расчитываем {checksum} для файла {f_name}...'.format(checksum=checksum, f_name=f))
-            with open(os.path.join(dir_path, "ФОРМУЛЯР_НОСИТЕЛЯ.txt"), 'a') as log_f:
-                log_f.write('{}={};\n'.format(f, get_checksum(os.path.join(dir_path, f), checksum)))
-            counter -= 1
-            print(
-                "Готово. Осталось файлов: {}\n".format(counter))
+            if f.lower().endswith(file_type):
+                print('Расчитываем {checksum} для файла {f_name}...'.format(checksum=checksum, f_name=f))
+                with open(os.path.join(dir_path, "ФОРМУЛЯР_НОСИТЕЛЯ.txt"), 'a') as log_f:
+                    log_f.write('{}={};\n'.format(f, get_checksum(os.path.join(dir_path, f), checksum)))
+                counter -= 1
+                print(
+                    "Готово. Осталось файлов: {}\n".format(counter))
         print('Затрачено времени на папку: {} c'.format(round(time.time() - t, 1), ))
 
 file_count = 0
@@ -68,9 +71,9 @@ for _, dirs, files in os.walk(root_dir):
 for root, dirnames, filenames in os.walk(root_dir):
     done_counter = 0
     if not dirnames:
-        worker(root, file_count)
+        worker(root, file_count, filetype)
     else:
         for dirpath in [os.path.join(root, dirname) for dirname in dirnames]:
-            worker(dirpath, file_count)
+            worker(dirpath, file_count, filetype)
 
 # input("\nГотово, насяльника! Нажми любую кнопку для завершениянама...")
