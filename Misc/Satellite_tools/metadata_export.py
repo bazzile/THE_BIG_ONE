@@ -3,7 +3,7 @@ import re
 import json
 
 # root_folder = os.path.dirname(os.path.abspath(__file__))
-root_folder = r'/Users/vasily/!MyFiles/Coding/PycharmProjects/THE_BIG_ONE/Misc/Satellite_tools'
+root_folder = r'U:\ОТА\ЯНАО17\Data\Imagery\Sentinel\подбор для мозаики\Тазовский'
 out_dir = root_folder
 
 # product = input('Please choose product type: \nLandsat-8 C1 [L]\nSentinel-2 L1C from AWS [S]\nYour choice: ').upper()
@@ -11,15 +11,14 @@ product = 'S'
 
 if product == 'L':
     regex = r'.*_MTL\.txt'
-    separator = '='
     parameter_list = ['LANDSAT_PRODUCT_ID', 'DATE_ACQUIRED', 'SPACECRAFT_ID',
                       'CLOUD_COVER_LAND', 'GRID_CELL_SIZE_PANCHROMATIC', 'GRID_CELL_SIZE_REFLECTIVE']
     sorting_parameter = 'DATE_ACQUIRED'
 elif product == 'S':
-    regex = r'productInfo.json'
-    separator = ' : '
+    regex = r'tileInfo.json'
     # parameter_list_tl = ["productName", "timestamp", "cloudyPixelPercentage", "utmZone", "latitudeBand", "gridSquare"]
-    parameter_list = ["product_id", "date_acquired", 'spacecraft_id']
+    parameter_list = \
+        ["product_id", "date_acquired", 'spacecraft_id', 'cloud_cover_land', 'tile_number', 'min_grid_cell_size']
     sorting_parameter = "date_acquired"
 else:
     raise Exception('Wrong parameter')
@@ -32,10 +31,15 @@ for rootdir, dirnames, filenames in os.walk(root_folder):
                 d = {}
                 if product == 'S':
                     product_json = json.load(f)
-                    d['product_id'] = product_json['name'][:37]
+                    # d['product_id'] = product_json['name'][:37]
+                    d['product_id'] = product_json['datastrip']['id']
                     d['date_acquired'] = product_json["timestamp"][:10]
-                    d['spacecraft_id'] = product_json['name'][:3]
+                    d['spacecraft_id'] = d['product_id'][:3]
+                    d['cloud_cover_land'] = str(product_json['cloudyPixelPercentage'])
+                    d['tile_number'] = str(product_json['utmZone']) + product_json['latitudeBand'] + product_json['gridSquare']
+                    d['min_grid_cell_size'] = str(10)
                 else:
+                    separator = '='
                     for line in f.read().splitlines():
                         for parameter in parameter_list:
                             if parameter in line:
