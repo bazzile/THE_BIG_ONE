@@ -19,7 +19,7 @@ elif product == 'S':
     regex = r'productInfo.json'
     separator = ' : '
     # parameter_list_tl = ["productName", "timestamp", "cloudyPixelPercentage", "utmZone", "latitudeBand", "gridSquare"]
-    parameter_list = ["product_id", "date_acquired"]
+    parameter_list = ["product_id", "date_acquired", 'spacecraft_id']
     sorting_parameter = "date_acquired"
 else:
     raise Exception('Wrong parameter')
@@ -34,6 +34,7 @@ for rootdir, dirnames, filenames in os.walk(root_folder):
                     product_json = json.load(f)
                     d['product_id'] = product_json['name'][:37]
                     d['date_acquired'] = product_json["timestamp"][:10]
+                    d['spacecraft_id'] = product_json['name'][:3]
                 else:
                     for line in f.read().splitlines():
                         for parameter in parameter_list:
