@@ -3,7 +3,7 @@ import re
 import json
 
 # root_folder = os.path.dirname(os.path.abspath(__file__))
-root_folder = r'U:\ОТА\ЯНАО17\Data\Imagery\Sentinel\подбор для мозаики\Тазовский'
+root_folder = r'/Users/vasily/!MyFiles/WORK/YANAO17/Class/Metadata'
 out_dir = root_folder
 
 # product = input('Please choose product type: \nLandsat-8 C1 [L]\nSentinel-2 L1C from AWS [S]\nYour choice: ').upper()
