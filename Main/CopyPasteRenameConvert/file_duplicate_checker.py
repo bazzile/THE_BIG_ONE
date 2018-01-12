@@ -2,7 +2,7 @@ import os
 from collections import Counter
 import shutil
 
-src_path = r'/Users/vasily/Desktop/Inbox/Test'
+src_path = r'U:\PRJ\2017\BANS17\1_QuickWork\4_DEM\ALL\src_TIF\10'
 
 duplicate_fname_list = [file for file, n in Counter(
     [os.path.splitext(file)[0] for file in os.listdir(src_path)]).items() if n > 1]

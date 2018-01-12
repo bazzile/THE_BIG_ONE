@@ -3,7 +3,7 @@ import re
 import json
 
 # root_folder = os.path.dirname(os.path.abspath(__file__))
-root_folder = r'/Users/vasily/!MyFiles/WORK/YANAO17/Class/Metadata'
+root_folder = r'E:\!temp\YANAO17_S2\Tazovsky'
 out_dir = root_folder
 
 # product = input('Please choose product type: \nLandsat-8 C1 [L]\nSentinel-2 L1C from AWS [S]\nYour choice: ').upper()
@@ -15,7 +15,7 @@ if product == 'L':
                       'CLOUD_COVER_LAND', 'GRID_CELL_SIZE_PANCHROMATIC', 'GRID_CELL_SIZE_REFLECTIVE']
     sorting_parameter = 'DATE_ACQUIRED'
 elif product == 'S':
-    regex = r'tileInfo.json'
+    regex = r'.*tileInfo.json'
     # parameter_list_tl = ["productName", "timestamp", "cloudyPixelPercentage", "utmZone", "latitudeBand", "gridSquare"]
     parameter_list = \
         ["product_id", "date_acquired", 'spacecraft_id', 'cloud_cover_land', 'tile_number', 'min_grid_cell_size']
@@ -27,6 +27,7 @@ scene_list = []
 for rootdir, dirnames, filenames in os.walk(root_folder):
     for filename in filenames:
         if re.match(regex, filename, re.IGNORECASE) is not None:
+            print(filename)
             with open(os.path.join(rootdir, filename), 'r') as f:
                 d = {}
                 if product == 'S':

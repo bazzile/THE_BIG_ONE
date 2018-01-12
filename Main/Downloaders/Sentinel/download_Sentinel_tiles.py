@@ -15,11 +15,11 @@ import json
 #         urllib.request.urlretrieve(item_http_link.rstrip(), os.path.join(out_folder, fname))
 # links_file = r"U:\PRJ\2017\YANAO17\2_Data\1_Imagery\Sentinel\period_2\Спсиок сцен Ямальский 3.txt"
 # out_folder = r"U:\PRJ\2017\YANAO17\2_Data\1_Imagery\Sentinel\period_2\Yamalsky\3"
-out_folder = r"U:\PRJ\2017\YANAO17\2_Data\1_Imagery\Sentinel\period_2\Yamalsky"
-src_folder = r"U:\PRJ\2017\YANAO17\2_Data\1_Imagery\Sentinel\period_2"
+out_folder = r"E:\!temp\YANAO17_S2\Tazovsky"
+src_folder = r"U:\PRJ\2017\YANAO17\2_Data\1_Imagery\Sentinel\period_2\_временная_папка_списки сцен"
 
 for file in os.listdir(src_folder):
-    if file.lower().endswith('.txt') and 'ямальский' in file.lower():
+    if file.lower().endswith('.txt') and 'тазовский' in file.lower():
         links_file = os.path.join(src_folder, file)
         fragment_number = os.path.splitext(file)[0].split()[-1]
         with open(links_file) as f:
@@ -39,7 +39,7 @@ for file in os.listdir(src_folder):
                 os.makedirs(dst_subdir)
             # items = ['B' + str(i).zfill(2) + '.jp2' for i in range(1, 13)] + \
             #         ['B8A.jp2', 'metadata.xml', 'preview.jp2', 'productInfo.json', 'tileInfo.json']
-            items = ['preview.jp2']
+            items = ['tileInfo.json']
             for item in items:
                 full_link = base_part + tile_num + item
                 print('Downloading...   ' + item)

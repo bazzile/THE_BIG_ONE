@@ -76,4 +76,4 @@ for root, dirnames, filenames in os.walk(root_dir):
         for dirpath in [os.path.join(root, dirname) for dirname in dirnames]:
             worker(dirpath, file_count, filetype)
 
-# input("\nГотово, насяльника! Нажми любую кнопку для завершениянама...")
+input("\nГотово, насяльника! Нажми любую кнопку для завершениянама...")
