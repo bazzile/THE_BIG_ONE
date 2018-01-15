@@ -6,7 +6,7 @@ import bs4
 import re
 
 dst_dir = r'V:\POKROV\04_ASTER\BASIC\4'
-link = 'https://e4ftl01.cr.usgs.gov/PullDir/030429753818118/'
+link = 'https://e4ftl01.cr.usgs.gov/PullDir/030430012817787'
 username = "lobanov"
 password = "RAjf_Ude2jo854fg"
 
@@ -43,7 +43,14 @@ web_content = requests.get(link)
 soup = bs4.BeautifulSoup(web_content.text, "html.parser")
 
 dem_links = soup.find_all(text=re.compile(r'.*\.zip$', re.IGNORECASE), href=True)
+
+# removing comleted items from list
+dem_links = [item for item in dem_links]
+
+
 total_file_num = len(dem_links)
+
+
 for i, dem_link in enumerate(dem_links):
     print('Processing {}/{} - {}'.format(i + 1, total_file_num, dem_link['href']))
     full_dem_link = urllib.parse.urljoin(link, dem_link['href'])
